@@ -1,0 +1,684 @@
+/* ============================================================
+   juego.css — Modo Amenaza v3 · EcuaSim
+   Canvas global sobre el panel completo (personitas escapan del SVG)
+   ============================================================ */
+
+/* ── Botón de acceso ────────────────────────────────────────── */
+#btn-modo-juego {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: .45rem .9rem;
+    background: linear-gradient(135deg, rgba(248,113,113,.18), rgba(192,132,252,.18));
+    border: 1px solid rgba(248,113,113,.4);
+    color: #f87171;
+    border-radius: 8px;
+    font-size: .78rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all .2s;
+    letter-spacing: .03em;
+    white-space: nowrap;
+}
+#btn-modo-juego:hover {
+    background: linear-gradient(135deg, rgba(248,113,113,.32), rgba(192,132,252,.28));
+    border-color: rgba(248,113,113,.7);
+    box-shadow: 0 0 16px rgba(248,113,113,.25);
+}
+
+/* ── Panel principal ────────────────────────────────────────── */
+#juego-panel {
+    display: none;
+    flex-direction: column;
+    padding: 1.4rem;
+    gap: 1.2rem;
+    overflow-y: auto;
+    background: var(--bg);
+    min-height: calc(100vh - 53px);
+    grid-column: 1 / -1;
+    /* CRÍTICO: position:relative para que el canvas global se posicione aquí */
+    position: relative;
+}
+
+/* ── Canvas global de personitas ────────────────────────────── */
+/*
+   #juego-global-canvas se inserta por JS como hijo de #juego-panel.
+   Está en position:absolute y cubre todo el panel.
+   pointer-events:none para no bloquear los clicks.
+   El JS le pone estos estilos; aquí solo el id por si necesitas override.
+*/
+#juego-global-canvas {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 10;
+}
+
+/* ── Header del juego ──────────────────────────────────────── */
+.juego-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1rem 1.4rem;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 11; /* sobre el canvas */
+}
+.juego-header-icon { font-size: 2rem; }
+.juego-header-info { flex: 1; }
+.juego-header-titulo {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 2px;
+}
+.juego-header-sub { font-size: .75rem; color: var(--muted); }
+.juego-turno-badge {
+    font-family: 'Space Grotesk', monospace;
+    font-size: .8rem;
+    font-weight: 700;
+    color: #f87171;
+    border: 1px solid rgba(248,113,113,.35);
+    border-radius: 20px;
+    padding: .3rem .9rem;
+    white-space: nowrap;
+}
+.juego-progreso-wrap {
+    width: 100%;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    margin-top: .6rem;
+    overflow: hidden;
+}
+#juego-progreso-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #f87171, #c084fc);
+    border-radius: 2px;
+    transition: width .5s ease;
+}
+
+/* ── Body tres columnas ─────────────────────────────────────── */
+.juego-body {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr 1fr;
+    gap: 1.1rem;
+    position: relative;
+    z-index: 11; /* sobre el canvas */
+}
+@media (max-width: 1100px) { .juego-body { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 700px)  { .juego-body { grid-template-columns: 1fr; } }
+
+/* ── Col izquierda ──────────────────────────────────────────── */
+.juego-left { display: flex; flex-direction: column; gap: 1rem; }
+
+/* ── Mapa — el SVG ya NO necesita el canvas encima ─────────── */
+.juego-mapa-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1rem;
+    /* Sin overflow:hidden para que las personitas puedan "escapar visualmente" */
+}
+.juego-mapa-titulo {
+    font-size: .65rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--muted);
+    margin-bottom: .7rem;
+}
+#juego-mapa-wrap {
+    position: relative;
+    width: 100%;
+    min-height: 210px;
+}
+#juego-mapa-svg {
+    width: 100%;
+    height: auto;
+    max-height: 210px;
+    display: block;
+}
+/* El viejo #juego-canvas-personas ya no se usa — eliminado del HTML */
+
+/* ── Historia ───────────────────────────────────────────────── */
+.juego-historia-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1rem 1.1rem;
+    flex: 1;
+}
+.juego-historia-titulo {
+    font-size: .65rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--muted);
+    margin-bottom: .7rem;
+    padding-bottom: .5rem;
+    border-bottom: 1px solid var(--border);
+}
+#juego-historia-texto {
+    font-size: .78rem;
+    color: var(--text);
+    line-height: 1.65;
+    min-height: 60px;
+    transition: opacity .3s;
+}
+#juego-historia-texto strong { color: var(--text); }
+#juego-historia-texto em { color: #f87171; font-style: normal; font-weight: 600; }
+
+/* ── KPIs ───────────────────────────────────────────────────── */
+.juego-kpis {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: .6rem;
+}
+.j-kpi-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: .7rem .8rem;
+    transition: border-color .3s;
+}
+.j-kpi-card.pulsing { border-color: #f87171; animation: kpi-pulse .6s ease; }
+@keyframes kpi-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(248,113,113,.4); }
+    70%  { box-shadow: 0 0 0 8px rgba(248,113,113,0); }
+    100% { box-shadow: none; }
+}
+.j-kpi-label {
+    font-size: .58rem;
+    text-transform: uppercase;
+    letter-spacing: .09em;
+    color: var(--muted);
+    margin-bottom: .25rem;
+}
+.j-kpi-val {
+    font-family: 'Space Grotesk', monospace;
+    font-size: 1.05rem;
+    font-weight: 700;
+}
+.j-kpi-delta { font-size: .6rem; font-weight: 700; margin-top: 2px; }
+.j-kpi-delta.up   { color: #4ade80; }
+.j-kpi-delta.down { color: #f87171; }
+
+/* ── Barra de recursos ──────────────────────────────────────── */
+.j-z-bar-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: .8rem 1rem;
+}
+.j-z-bar-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: .7rem;
+    color: var(--muted);
+    margin-bottom: .5rem;
+}
+.j-z-bar-track { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+#j-z-bar { height: 100%; width: 0%; border-radius: 4px; transition: width .6s ease, background .6s; }
+#j-estado { font-size: .72rem; font-weight: 700; margin-top: .4rem; }
+
+/* ── Col central: amenazas ──────────────────────────────────── */
+.juego-center { display: flex; flex-direction: column; gap: 1rem; }
+
+.juego-amenaza-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.1rem;
+    flex: 1;
+}
+.juego-section-titulo {
+    font-size: .65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--muted);
+    margin-bottom: .8rem;
+    padding-bottom: .5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+#amenazas-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: .5rem;
+    margin-bottom: .7rem;
+}
+@media (max-width: 600px) { #amenazas-grid { grid-template-columns: repeat(2, 1fr); } }
+
+.amenaza-card {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: .6rem .4rem;
+    cursor: pointer;
+    text-align: center;
+    transition: all .2s;
+    background: var(--surface2);
+    position: relative;
+    overflow: hidden;
+}
+.amenaza-card::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: var(--amenaza-color, #f87171);
+    opacity: 0;
+    transition: opacity .2s;
+}
+.amenaza-card:hover::before { opacity: .07; }
+.amenaza-card:hover {
+    border-color: var(--amenaza-color, #f87171);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,.15);
+}
+.amenaza-seleccionada {
+    border-color: var(--amenaza-color, #f87171) !important;
+    background: rgba(248,113,113,.08);
+    box-shadow: 0 0 12px rgba(248,113,113,.2);
+}
+.amenaza-seleccionada::before { opacity: .1 !important; }
+.amenaza-emoji { font-size: 1.3rem; margin-bottom: 3px; position: relative; }
+.amenaza-nombre {
+    font-size: .64rem;
+    font-weight: 700;
+    color: var(--text);
+    position: relative;
+    line-height: 1.2;
+}
+
+/* Selector de clase */
+#juego-clase-section { display: none; margin-top: .6rem; }
+#clase-titulo { font-size: .7rem; color: var(--muted); margin-bottom: .5rem; font-weight: 600; }
+#clase-cards { display: flex; gap: .4rem; flex-wrap: wrap; }
+.clase-card {
+    flex: 1; min-width: 64px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: .5rem .4rem;
+    text-align: center;
+    cursor: pointer;
+    background: var(--surface2);
+    transition: all .2s;
+}
+.clase-card:hover { border-color: var(--muted); transform: translateY(-1px); }
+.clase-seleccionada { border-color: #f87171 !important; background: rgba(248,113,113,.1); }
+.clase-emoji { font-size: .95rem; }
+.clase-nombre { font-size: .62rem; font-weight: 700; color: var(--text); margin-top: 2px; line-height: 1.2; }
+.clase-bonus { font-size: .55rem; color: var(--muted); margin-top: 2px; line-height: 1.2; }
+
+/* Input nombre */
+#juego-nombre-section { display: none; margin-top: .6rem; }
+#juego-nombre-input {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: .5rem .8rem;
+    color: var(--text);
+    font-family: inherit;
+    font-size: .8rem;
+    outline: none;
+    transition: border-color .15s;
+    box-sizing: border-box;
+}
+#juego-nombre-input:focus { border-color: #f87171; }
+#juego-nombre-input::placeholder { color: var(--muted); }
+
+/* Botón activar */
+#btn-activar-amenaza {
+    width: 100%;
+    margin-top: .8rem;
+    padding: .7rem;
+    background: linear-gradient(135deg, #f87171, #c084fc);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: .85rem;
+    cursor: pointer;
+    transition: all .2s;
+    letter-spacing: .04em;
+}
+#btn-activar-amenaza:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px rgba(248,113,113,.4);
+}
+#btn-activar-amenaza:disabled {
+    background: var(--border);
+    color: var(--muted);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* ── Log de eventos ──────────────────────────────────────────── */
+.juego-log-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1rem;
+}
+#juego-log {
+    display: flex;
+    flex-direction: column;
+    gap: .35rem;
+    max-height: 160px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+}
+.log-item {
+    display: flex;
+    gap: .5rem;
+    align-items: flex-start;
+    font-size: .7rem;
+    color: var(--muted);
+    line-height: 1.5;
+    padding: .28rem .5rem;
+    border-radius: 6px;
+    background: var(--surface2);
+}
+.log-item strong { color: var(--text); }
+.log-turno {
+    font-family: 'Space Grotesk', monospace;
+    font-size: .6rem;
+    font-weight: 700;
+    color: var(--muted);
+    white-space: nowrap;
+    margin-top: 1px;
+    min-width: 20px;
+}
+.log-peligro { border-left: 2px solid #f87171; }
+.log-ok      { border-left: 2px solid #4ade80; }
+.log-info    { border-left: 2px solid var(--muted); }
+
+/* ── Col derecha: gráfica ────────────────────────────────────── */
+.juego-right { display: flex; flex-direction: column; gap: 1rem; }
+
+#juego-chart-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1rem;
+    flex: 1;
+}
+.juego-chart-titulo {
+    font-size: .65rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--muted);
+    margin-bottom: .7rem;
+}
+#juego-mini-chart-wrap { height: 200px; position: relative; }
+
+/* ── Modal evento dramático ──────────────────────────────────── */
+#juego-evento-dramatico {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(5,11,20,.85);
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(6px);
+}
+.drama-box {
+    background: var(--surface);
+    border: 2px solid;
+    border-radius: 20px;
+    padding: 2rem 2.5rem;
+    text-align: center;
+    max-width: 420px;
+    animation: drama-in .35s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes drama-in {
+    from { transform: scale(.7) translateY(30px); opacity: 0; }
+    to   { transform: scale(1) translateY(0);     opacity: 1; }
+}
+.drama-emoji  { font-size: 3rem; margin-bottom: .6rem; }
+.drama-titulo { font-family: 'Space Grotesk', sans-serif; font-size: 1.3rem; font-weight: 700; margin-bottom: .5rem; }
+.drama-texto  { font-size: .85rem; color: var(--muted); line-height: 1.6; margin-bottom: 1.2rem; }
+.drama-btn    { padding: .65rem 1.6rem; border: none; border-radius: 10px; font-weight: 700; font-size: .88rem; cursor: pointer; color: #fff; }
+
+/* ── Veredicto final ─────────────────────────────────────────── */
+#juego-veredicto { display: none; }
+.veredicto-box {
+    background: var(--surface);
+    border: 2px solid;
+    border-radius: 16px;
+    padding: 1.5rem;
+    text-align: center;
+}
+.veredicto-emoji  { font-size: 2.5rem; margin-bottom: .5rem; }
+.veredicto-titulo { font-family: 'Space Grotesk', sans-serif; font-size: 1.3rem; font-weight: 700; margin-bottom: .5rem; }
+.veredicto-desc   { font-size: .82rem; color: var(--muted); line-height: 1.6; margin-bottom: 1rem; }
+.veredicto-stats  { display: flex; justify-content: center; gap: 1.5rem; margin-bottom: 1.2rem; }
+.vstat { display: flex; flex-direction: column; gap: 3px; font-size: .72rem; color: var(--muted); }
+.vstat strong { font-size: 1.1rem; font-family: 'Space Grotesk', monospace; }
+.btn-reiniciar-juego {
+    padding: .65rem 1.4rem;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    color: var(--muted);
+    font-size: .82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .15s;
+}
+.btn-reiniciar-juego:hover { border-color: var(--text); color: var(--text); }
+
+/* ── Alerta flash ────────────────────────────────────────────── */
+#juego-alerta {
+    display: none;
+    position: fixed;
+    top: 70px; left: 50%;
+    transform: translateX(-50%);
+    background: #f87171;
+    color: #fff;
+    padding: .65rem 1.4rem;
+    border-radius: 10px;
+    font-size: .82rem;
+    font-weight: 700;
+    z-index: 9999;
+    box-shadow: 0 4px 20px rgba(248,113,113,.4);
+    animation: slidein .3s ease;
+}
+@keyframes slidein {
+    from { transform: translateX(-50%) translateY(-10px); opacity: 0; }
+    to   { transform: translateX(-50%) translateY(0);     opacity: 1; }
+}
+
+/* ── Modo claro ──────────────────────────────────────────────── */
+:root.light #btn-modo-juego  { color: #dc2626; border-color: rgba(220,38,38,.4); background: rgba(220,38,38,.08); }
+:root.light .amenaza-card    { background: #f7f9fc; }
+:root.light .clase-card      { background: #f7f9fc; }
+:root.light .log-item        { background: #f7f9fc; }
+:root.light #juego-nombre-input { background: #f7f9fc; border-color: #cbd5e0; color: #1a202c; }
+/* ── Fix posición mapa juego ─────────────────────────────────── */
+#juego-mapa-wrap {
+    position: relative;
+    width: 100%;
+    height: 180px;
+    overflow: hidden;
+}
+
+#juego-mapa-svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+/* ── Panel de decisiones ──────────────────────────────────────── */
+#juego-decision-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.1rem;
+    margin-top: .8rem;
+}
+#decision-cards { display: flex; flex-direction: column; gap: .5rem; }
+
+.decision-card {
+    display: flex;
+    align-items: center;
+    gap: .7rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: .7rem .9rem;
+    cursor: pointer;
+    background: var(--surface2);
+    transition: all .2s;
+}
+.decision-card:hover:not(.decision-disabled) {
+    border-color: #4ade80;
+    transform: translateX(3px);
+}
+.decision-disabled {
+    opacity: .4;
+    cursor: not-allowed;
+}
+.decision-emoji { font-size: 1.4rem; flex-shrink: 0; }
+.decision-info { flex: 1; }
+.decision-nombre { font-size: .78rem; font-weight: 700; color: var(--text); }
+.decision-efecto { font-size: .65rem; color: var(--muted); margin-top: 1px; }
+.decision-costo {
+    font-family: 'Space Grotesk', monospace;
+    font-size: .75rem;
+    font-weight: 700;
+    color: #4ade80;
+    white-space: nowrap;
+}
+.decision-disabled .decision-costo { color: #f87171; }
+
+#juego-presupuesto.presupuesto-bajo { color: #f87171 !important; border-color: rgba(248,113,113,.35) !important; }
+/* ══════════════════════════════════════════════════════════════
+   PANEL DE DIFICULTAD — añadir al final de juego.css
+   ══════════════════════════════════════════════════════════════ */
+
+/* Sección de dificultad en la columna central */
+.juego-dificultad-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: .85rem 1rem;
+    margin-bottom: .75rem;
+}
+
+.juego-dificultad-titulo {
+    font-size: .68rem;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    margin-bottom: .6rem;
+}
+
+#juego-dificultad-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: .5rem;
+}
+
+.dif-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: .6rem .4rem;
+    background: var(--surface2);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: border-color .2s, background .2s, transform .15s;
+    text-align: center;
+    user-select: none;
+}
+
+.dif-card:hover {
+    border-color: var(--dif-color, var(--accent1));
+    background: color-mix(in srgb, var(--dif-color, var(--accent1)) 8%, var(--surface2));
+    transform: translateY(-1px);
+}
+
+.dif-card.dif-activa {
+    border-color: var(--dif-color, var(--accent1));
+    background: color-mix(in srgb, var(--dif-color, var(--accent1)) 12%, var(--surface2));
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--dif-color, var(--accent1)) 25%, transparent);
+}
+
+.dif-emoji {
+    font-size: 1.15rem;
+    line-height: 1;
+}
+
+.dif-nombre {
+    font-size: .72rem;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.dif-desc {
+    font-size: .62rem;
+    color: var(--muted);
+    line-height: 1.35;
+}
+
+.dif-budget {
+    font-size: .68rem;
+    font-weight: 700;
+    margin-top: 2px;
+}
+
+/* Bloquear cambio durante partida */
+.dif-card.dif-locked {
+    opacity: .45;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Nota "no puedes cambiar durante partida" */
+#juego-dif-nota {
+    font-size: .65rem;
+    color: var(--muted);
+    text-align: center;
+    margin-top: .4rem;
+    font-style: italic;
+    display: none;
+}
+#juego-dif-nota.visible {
+    display: block;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   Corrección de la barra de Z cuando K es muy grande
+   (el porcentaje ya se calcula bien, solo estilos)
+   ══════════════════════════════════════════════════════════════ */
+.j-z-bar-wrap {
+    margin-top: .5rem;
+}
+/* ── Fix centrado ruleta ─────────────────────────────────────── */
+#amenazas-grid:has(#ruleta-wrap) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    grid-template-columns: unset;
+}
+
+#ruleta-wrap {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#ruleta-wrap > div:first-child {
+    width: 220px;
+    margin: 0 auto;
+}

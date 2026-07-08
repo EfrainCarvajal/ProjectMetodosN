@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" class="light">
+    <head>
+        <meta charset="UTF-8">
+        <script>
+            if (localStorage.getItem('ecuasim_tema') === 'light') {
+                document.documentElement.classList.add('light');
+            }
+        </script>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+        <link rel="stylesheet" th:href="@{/reportes.css}">
+
+        <title>Reportes · EcuaSim</title>
+    </head>
+    <body>
+
+        <!-- NAV -->
+        <nav>
+            <a class="nav-logo" th:href="@{/}">🇪🇨 EcuaSim</a>
+            <div class="nav-links">
+                <a th:href="@{/}">Inicio</a>
+                <a th:href="@{/presentacion}">Presentación</a>
+                <a th:href="@{/simulacion}">Simulación</a>
+                <a th:href="@{/reportes}" class="active">Reportes</a>
+            </div>
+            <button onclick="toggleTema()" title="Cambiar tema"
+                    style="background:none;border:1px solid var(--border);color:var(--text);
+                    border-radius:8px;padding:.4rem .7rem;cursor:pointer;
+                    display:flex;align-items:center;font-size:.9rem;">
+                <i id="icono-tema" class="bi bi-sun-fill text-warning"></i>
+            </button>
+        </nav>
+
+        <!-- HERO -->
+        <section class="hero-sec">
+            <div class="container">
+                <div class="eyebrow">Exportación de resultados</div>
+                <h1 class="page-title">Reportes de <span>Simulación</span></h1>
+                <p class="page-sub">
+                    Exporta el historial completo de la última simulación RK4 en PDF o Excel.
+                    Incluye estadísticas descriptivas, análisis comparativo de las tres variables
+                    y conclusiones automáticas generadas a partir de los datos.
+                </p>
+
+                <div class="dl-hero">
+                    <a href="/reportes/pdf" target="_blank" class="btn-dl btn-dl-pdf">
+                        <span class="btn-dl-icon">📄</span>
+                        Descargar PDF
+                    </a>
+                    <a href="/reportes/excel" class="btn-dl btn-dl-xlsx">
+                        <span class="btn-dl-icon">📊</span>
+                        Descargar Excel
+                    </a>
+                </div>
+                <p class="dl-note">
+                    <i class="bi bi-info-circle"></i>
+                    Ejecuta una simulación desde el simulador antes de descargar para obtener datos actualizados.
+                </p>
+            </div>
+        </section>
+
+        <!-- QUÉ CONTIENE -->
+        <section class="inside-sec">
+            <div class="container">
+                <div class="sec-label">Contenido del reporte</div>
+                <h2 class="sec-title">¿Qué incluye cada reporte?</h2>
+                <p class="sec-desc">Ambos formatos contienen la misma información analítica, adaptada al mejor uso de cada soporte.</p>
+
+                <div class="inside-grid">
+                    <div class="inside-card">
+                        <span class="inside-card-icon">📐</span>
+                        <div class="inside-card-title">Descripción del modelo</div>
+                        <p>Las 3 EDOs acopladas con sus parámetros y la función de migración dinámica μ(Z).</p>
+                    </div>
+                    <div class="inside-card">
+                        <span class="inside-card-icon">📈</span>
+                        <div class="inside-card-title">Estadísticas descriptivas</div>
+                        <p>Valor inicial, final, mínimo, máximo, promedio y variación porcentual de X, Y y Z.</p>
+                    </div>
+                    <div class="inside-card">
+                        <span class="inside-card-icon">🔁</span>
+                        <div class="inside-card-title">Análisis comparativo</div>
+                        <p>Relación entre la presión demográfica y la evolución del stock de recursos críticos.</p>
+                    </div>
+                    <div class="inside-card">
+                        <span class="inside-card-icon">🗂️</span>
+                        <div class="inside-card-title">Historial completo</div>
+                        <p>Tabla paso a paso de la integración RK4: tiempo, X, Y y Z para cada iteración.</p>
+                    </div>
+                    <div class="inside-card">
+                        <span class="inside-card-icon">🤖</span>
+                        <div class="inside-card-title">Conclusión automática</div>
+                        <p>Interpretación generada según el comportamiento de Z: equilibrio, agotamiento o superávit.</p>
+                    </div>
+                    <div class="inside-card">
+                        <span class="inside-card-icon">📉</span>
+                        <div class="inside-card-title">Datos para gráfica</div>
+                        <p>Columnas limpias de hasta 200 puntos para insertar un gráfico de líneas en Excel.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- COMPARATIVA DE FORMATOS -->
+        <section class="formats-sec">
+            <div class="container">
+                <div class="sec-label">Elige el formato</div>
+                <h2 class="sec-title">PDF vs Excel</h2>
+                <p class="sec-desc">Cada formato está pensado para un propósito distinto. Puedes descargar ambos.</p>
+
+                <div class="formats-grid">
+                    <!-- PDF -->
+                    <div class="format-card pdf">
+                        <div class="format-header">
+                            <span class="format-badge pdf">PDF</span>
+                            <span class="format-name">Informe ejecutivo</span>
+                        </div>
+                        <ul class="format-list">
+                            <li>Encabezado y pie de página en cada hoja con número de página y fecha de generación</li>
+                            <li>Sistema de ecuaciones con formato matemático legible</li>
+                            <li>Tabla de estadísticas con filas alternadas y variación en color</li>
+                            <li>Análisis comparativo en prosa, generado automáticamente</li>
+                            <li>Tabla muestral del historial (hasta 30 pasos distribuidos)</li>
+                            <li>Ideal para presentar, imprimir o adjuntar en un informe académico</li>
+                        </ul>
+                        <a href="/reportes/pdf" target="_blank" class="btn-fmt pdf">
+                            <i class="bi bi-file-earmark-pdf-fill"></i> Descargar PDF
+                        </a>
+                    </div>
+
+                    <!-- Excel -->
+                    <div class="format-card xlsx">
+                        <div class="format-header">
+                            <span class="format-badge xlsx">XLSX</span>
+                            <span class="format-name">Libro de datos</span>
+                        </div>
+                        <ul class="format-list">
+                            <li>3 hojas: datos completos, estadísticas y análisis, y datos listos para graficar</li>
+                            <li>Fórmulas Excel nativas para PROMEDIO — el libro recalcula si cambias datos</li>
+                            <li>Variación porcentual con formato % y color naranja para resaltar cambios</li>
+                            <li>Conclusión automática embebida en la hoja de estadísticas</li>
+                            <li>Columna de hasta 200 puntos muestreados para insertar gráfico de líneas</li>
+                            <li>Ideal para explorar los datos, hacer análisis propios o construir gráficas</li>
+                        </ul>
+                        <a href="/reportes/excel" class="btn-fmt xlsx">
+                            <i class="bi bi-file-earmark-spreadsheet-fill"></i> Descargar Excel
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CÓMO FUNCIONA -->
+        <section class="how-sec">
+            <div class="container">
+                <div class="sec-label">Flujo de uso</div>
+                <h2 class="sec-title">Cómo obtener tu reporte</h2>
+                <div class="how-steps">
+                    <div class="how-step">
+                        <div class="how-num">01</div>
+                        <div class="how-title">Selecciona provincia</div>
+                        <p class="how-sub">Elige Guayas, Pichincha o Pastaza en el simulador y ajusta los parámetros de tu escenario.</p>
+                    </div>
+                    <div class="how-step">
+                        <div class="how-num">02</div>
+                        <div class="how-title">Ejecuta RK4</div>
+                        <p class="how-sub">Presiona "Ejecutar simulación". Los resultados se guardan automáticamente en la base de datos.</p>
+                    </div>
+                    <div class="how-step">
+                        <div class="how-num">03</div>
+                        <div class="how-title">Descarga el reporte</div>
+                        <p class="how-sub">Vuelve a esta página y descarga PDF o Excel. El reporte refleja la última simulación ejecutada.</p>
+                    </div>
+                    <div class="how-step">
+                        <div class="how-num">04</div>
+                        <div class="how-title">Analiza y comparte</div>
+                        <p class="how-sub">Abre el Excel para construir tus propias gráficas, o adjunta el PDF en tu informe académico.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA FINAL -->
+        <section class="cta-sec">
+            <div class="container">
+                <div class="cta-title">¿Aún no has simulado?</div>
+                <p class="cta-sub">Los reportes se generan a partir de los datos de la última simulación. Ejecuta una ahora.</p>
+                <a class="btn-big" th:href="@{/simulacion}">▶ Abrir simulador RK4</a>
+            </div>
+        </section>
+
+        <footer>
+            Sistema de 3 EDOs · Método RK4 clásico · Ecuador: Guayas · Pichincha · Pastaza &nbsp;|&nbsp; Datos: INEC 2022
+        </footer>
+
+        <script src="/js/tema.js"></script>
+    </body>
+</html>

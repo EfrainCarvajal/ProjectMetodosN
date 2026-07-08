@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" class="light"><head>
+    <meta charset="UTF-8">
+    <script>
+        if (localStorage.getItem('ecuasim_tema') === 'light') {
+            document.documentElement.classList.add('light');
+        }
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/index.css}">
+    <!-- En el <head>, si no lo tienes ya -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <title>Simulación Poblacional · Ecuador</title>
+
+</head>
+<body>
+<div class="page">
+
+    <!-- NAV -->
+    <nav>
+        <div class="nav-logo">🇪🇨 EcuaSim</div>
+
+        <div class="nav-badge">Métodos Numéricos · RK4</div>
+        <button onclick="toggleTema()" title="Cambiar tema"
+                style="background:none;border:1px solid var(--border);color:var(--text);
+               border-radius:8px;padding:.4rem .7rem;cursor:pointer;
+               display:flex;align-items:center;font-size:.9rem;">
+            <i id="icono-tema" class="bi bi-sun-fill text-warning"></i>
+        </button>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+
+        <div class="flag-row">
+            <div class="flag-dot"></div>
+            Simulador Computacional de Dinámica Poblacional
+        </div>
+
+        <h1>Modela el futuro<br>de <span class="hl">Ecuador</span></h1>
+
+        <p class="subtitle">
+            Sistema de 3 EDOs acopladas resuelto con Runge-Kutta 4 clásico.
+            Proyecciones 2000–2050 para población urbana, periférica y recursos críticos,
+            calibradas con datos del Censo INEC 2022.
+        </p>
+
+        <div class="chips">
+            <div class="chip gy"><div class="chip-dot"></div>Guayas · Costa</div>
+            <div class="chip pi"><div class="chip-dot"></div>Pichincha · Sierra</div>
+            <div class="chip pa"><div class="chip-dot"></div>Pastaza · Amazonía</div>
+        </div>
+
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-num">3</div>
+                <div class="stat-label">Variables de estado</div>
+            </div>
+            <div class="stat-div"></div>
+            <div class="stat">
+                <div class="stat-num">RK4</div>
+                <div class="stat-label">Método numérico</div>
+            </div>
+            <div class="stat-div"></div>
+            <div class="stat">
+                <div class="stat-num">50 años</div>
+                <div class="stat-label">Horizonte temporal</div>
+            </div>
+        </div>
+
+        <a class="btn-primary" th:href="@{/presentacion}">
+            Explorar simulación
+            <span class="btn-arrow">→</span>
+        </a>
+
+        <!-- PREVIEW CARD -->
+        <div class="preview-card">
+            <div class="preview-top">
+                <div class="dot dot-r"></div>
+                <div class="dot dot-y"></div>
+                <div class="dot dot-g"></div>
+                <span class="preview-title">Sistema de ecuaciones acopladas</span>
+            </div>
+            <div class="ode-block">
+                <div class="ode-line">
+                    d<span class="ode-var">X</span>/dt &nbsp;=&nbsp;
+                    (β<sub>X</sub> − δ<sub>X</sub>)·X &nbsp;−&nbsp; μ(Z)·X &nbsp;+&nbsp; ν·Y
+                </div>
+                <div class="ode-line">
+                    d<span class="ode-var y">Y</span>/dt &nbsp;=&nbsp;
+                    (β<sub>Y</sub> − δ<sub>Y</sub>)·Y &nbsp;+&nbsp; μ(Z)·X &nbsp;−&nbsp; ν·Y
+                </div>
+                <div class="ode-line">
+                    d<span class="ode-var z">Z</span>/dt &nbsp;=&nbsp;
+                    r·Z·(1 − Z/K) &nbsp;−&nbsp; c·(X + Y)
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <footer>
+        Sistema de 3 EDOs · Método RK4 clásico · Ecuador: Guayas · Pichincha · Pastaza &nbsp;|&nbsp; Datos: INEC 2022
+    </footer>
+
+</div>
+<script src="/js/tema.js"></script>
+</body>
+</html>
