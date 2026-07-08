@@ -107,7 +107,7 @@ public class ReporteService {
                 sesion.getX0(), sesion.getY0(), sesion.getZ0()));
 
         // ── Descripción del modelo ────────────────────────────────────────
-        addSeccion(doc, "1. Modelo Epidemiológico — Ecuaciones Diferenciales");
+        addSeccion(doc, "1. Modelo Demográfico-Ecológico — Ecuaciones Diferenciales");
         doc.add(buildTablaModelo());
 
         // ── Parámetros usados ─────────────────────────────────────────────
@@ -460,7 +460,7 @@ public class ReporteService {
         addFilaModelo(t, "X  (Urbana)",     "dX/dt = (α_X − δ_X)·X  − μ(Z)·X  + ν·Y");
         addFilaModelo(t, "Y  (Periférica)", "dY/dt = (α_Y − δ_Y)·Y  + μ(Z)·X  − ν·Y");
         addFilaModelo(t, "Z  (Recursos)",   "dZ/dt = r·Z·(1 − Z/K)  − τ·(X + Y)");
-        addFilaModelo(t, "μ(Z) (Migración)","μ(Z) = μ_base + μ_stress / (1 + Z)");
+        addFilaModelo(t, "μ(Z) (Migración)","μ(Z) = μ_base + μ_stress · max(0, (zCrit − Z)/(zCrit + 1)), zCrit = K·0.3");
         return t;
     }
 

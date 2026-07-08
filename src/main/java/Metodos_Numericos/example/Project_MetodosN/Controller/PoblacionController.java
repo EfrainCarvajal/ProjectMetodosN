@@ -52,9 +52,9 @@ public class PoblacionController {
             @RequestParam(defaultValue = "0.04") double birthY,
             @RequestParam(defaultValue = "0.015") double deathY,
             @RequestParam(defaultValue = "0.005") double muBase,
-            @RequestParam(defaultValue = "0.08") double muStress,
-            @RequestParam(defaultValue = "0.003") double nuBase,
-            @RequestParam(defaultValue = "0.0002") double tasaConsumo,
+            @RequestParam(defaultValue = "0.005") double muStress,
+            @RequestParam(defaultValue = "0.013") double nuBase,
+            @RequestParam(defaultValue = "0.0000006") double tasaConsumo,
             @RequestParam(defaultValue = "0.05") double r,
             @RequestParam(defaultValue = "1000.0") double K) {
 
